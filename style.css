@@ -1,0 +1,74 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    margin: auto;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+h1{
+    padding-left: 15px;
+}
+
+.navbar{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: whitesmoke;
+    padding: 15px;
+}
+
+.nav-sx, .nav-dx{
+    align-items: center;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.main-container {
+    background-color: turquoise;
+}
+
+.square-container{
+    width: 400px;
+    height: 400px;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 50px;
+}
+
+.square-container .square {
+    min-height: 20px;
+    border: 1px solid;
+    width: 10%;
+    height: 10%;
+    background-color: #ff7ade;
+    cursor: pointer;
+    user-select: none;
+    box-shadow: inset 3px 3px 1px 1px rgb(255 255 255 / 65%),
+    inset -3px -3px 1px 1px rgb(0 0 0 / 15%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+  }
+
+.caption{
+    height: 100%;
+    padding: 10px;
+}
+
+.footer-container{
+    margin-left: 20px;
+}
+/*Utilities*/
+.d-inlineblock{
+    display: inline-block;
+}
+
+.d-flex{
+    display: flex;
+}
+
+.square-container .square.clicked{
+    background-color: rgb(131, 175, 251);
+}
