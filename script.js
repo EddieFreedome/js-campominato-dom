@@ -19,6 +19,7 @@
 const difficolta = document.getElementById("difficulties")
 const playButton = document.getElementById("play")
 const squareContainer = document.querySelector(".square-container")
+let arrBombeTotali = []
 
 //dopo aver flaggato il livello scelto, con il click facciamo leggere il valore che assume il livello
 //scelta livello
@@ -35,9 +36,11 @@ playButton.addEventListener("click", function(event){
   generaGriglia(celleTotali);
   console.log("l'utente ha scelto il livello", level);
   console.log(`dovranno essere create ${celleTotali} celle.`);
-});
 
-const square = document.createElement("div")
+  //funzione per creare bombe
+  arrBombeTotali = generaBombe(16, celleTotali);
+  console.log(`Il numero di bombe e' ${arrBombeTotali}`);
+});
 
 //Funzioni: 
 function generaNumeroCelle (level){
@@ -73,7 +76,14 @@ function generaGriglia(celleTotali) {
     // Creo un ciclo in base al numero di celle da creare
     for (let i = 0; i < celleTotali; i++) {
       // genero una singola cella per volta fino al numero indicato dalla variabile
-      const cella = generaCellaSingola(i, cellSize); //**
+      const cella = document.createElement("div");
+      cella.classList.add("square");
+      cella.style.width = cellSize + "%";
+      cella.style.height = cellSize + "%";
+      cella.innerHTML = i + 1;
+
+      console.log(cella); //**
+      cella.addEventListener("click", onSingleCellClick);
   
       // Aggiungo la cella al squareContainer
       //squareContainer.innerHTML += cell;
@@ -82,47 +92,70 @@ function generaGriglia(celleTotali) {
 //append.(cella) dopo aver creato tutte le celle div con create element
 }
 
-function generaCellaSingola(i, cellSize){ //**
-    //anziche' creare una variabile Cella e scrivergli con il template `div class, style ecc..`
-    //creo una cella "div" con createElement e la andro' 
-    //ad appendere e stilizzare poi aggiungendo classi nel corso della funzione.
-    const cella = document.createElement("div");
-    //aggiungo lo stile css alla cella aggiungendole la classe corrispondente in css
-    //senza dimensioni! la larghezza e l'altezza vanno generate con valori
-    //non statici in base alla richiesta: ...style inline?
-    cella.classList.add("square"); //aggiunto classe stile .square dal css
-    //servono dimensioni ora con style inline che cambia in base alla cellSize stabilita prima
-    //aggiungo il % come stringa per "falsare" la lettura del valore numerico e ingannarlo a leggerlo come percentuale
-    cella.style.width = cellSize + "%";
-    cella.style.height = cellSize + "%";
+// function generaCellaSingola(i, cellSize){ //**
+//     //anziche' creare una variabile Cella e scrivergli con il template `div class, style ecc..`
+//     //creo una cella "div" con createElement e la andro' 
+//     //ad appendere e stilizzare poi aggiungendo classi nel corso della funzione.
+//     const cella = document.createElement("div");
+//     //aggiungo lo stile css alla cella aggiungendole la classe corrispondente in css
+//     //senza dimensioni! la larghezza e l'altezza vanno generate con valori
+//     //non statici in base alla richiesta: ...style inline?
+//     cella.classList.add("square"); //aggiunto classe stile .square dal css
+//     //servono dimensioni ora con style inline che cambia in base alla cellSize stabilita prima
+//     //aggiungo il % come stringa per "falsare" la lettura del valore numerico e ingannarlo a leggerlo come percentuale
+//     cella.style.width = cellSize + "%";
+//     cella.style.height = cellSize + "%";
     
 
-    //----- non ho capito ---// E' una variabile innestata?
-    //E' una sostituzione di variabile/dichiarazione di una variabile/innesto?: cella con numeroCella/ numeroCella dentro cella
-    // cell.numeroCella = i + 1;
-    //come con numeroCella.innerHTML = ?
+//     //----- non ho capito ---// E' una variabile innestata?
+//     //E' una sostituzione di variabile/dichiarazione di una variabile/innesto?: cella con numeroCella/ numeroCella dentro cella
+//     // cell.numeroCella = i + 1;
+//     //come con numeroCella.innerHTML = ?
 
-    //lego ogni cella generata ad un indice numerico, ad un numero che indica il n. di cella
-    cella.numeroCella = [i + 1];
-    //ad ogni click su cella viene attivata una classe di stile css per stilizzarla da cliccata
-    cella.addEventListener("click", onSingleCellClick); //funzione adhoc richiamata
+//     //lego ogni cella generata ad un indice numerico, ad un numero che indica il n. di cella
+//     cella.numeroCella = [i + 1];
+//     //ad ogni click su cella viene attivata una classe di stile css per stilizzarla da cliccata
     
-    //Arrow Function: 
-    // cella.addEventListener("click", () => onSingleCellClick(i + 1, cell));
+//     //Arrow Function: 
+//     // cella.addEventListener("click", () => onSingleCellClick(i + 1, cell));
 
-    //Funzione normale
-    /*   cella.addEventListener("click", function () {
-        this.classList.toggle("clicked");
+//     //Funzione normale
+//     /*   cella.addEventListener("click", function () {
+//         this.classList.toggle("clicked");
     
-        console.log("clickata cella #" + (i + 1));
-      }); */
+//         console.log("clickata cella #" + (i + 1));
+//       }); */
   
   
-    cella.textContent = i + 1;
-  return cella;
-  }
+//     cella.textContent = i + 1;
+//   return cella;
+//   }
 
 function onSingleCellClick (){
   //quando clicco la cella, aggiungi classi active, se la ha gia' va tolta
-  this.classList.toggle("clicked");
+  const cellaCorrente = parseInt(this.textContent);
+  if (arrBombeTotali.includes(cellaCorrente)) {
+    this.classList.add("bomb")
+    //show tutte le bombe
+    //creo overlay che non mi fa cliccare
+  } else {
+    this.classList.add("clicked");
+  }
+}
+
+function generaBombe(numeroBombe, numeroMaxBombe){
+  let arrBombe = [];
+  while (arrBombe.length < 16){
+    const newBomba = generateRandomNum(1, numeroMaxBombe);
+    let numeroEsiste = arrBombe.includes(newBomba);
+    if (!numeroEsiste){
+      arrBombe.push(newBomba);
+    }
+  } 
+  return arrBombe;
+}
+
+function generateRandomNum (minNumber = 1, maxNumber = 10){
+  const randomNum = Math.floor(Math.random() * (maxNumber - minNumber + 1) + minNumber);
+  return randomNum;
 }
